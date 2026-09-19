@@ -192,7 +192,7 @@ npm test
 ## AI Tools Used
 
 - **ChatGPT**: Architecture discussion, debugging assistance, documentation refinement
-- **Cursor**: Implementation support
+- **Google Antigravity**: Implementation support and repository documentation polish
 
 ### How AI Was Used
 AI tools were used as development assistants for architecture exploration, debugging, implementation support, and documentation. All generated suggestions were reviewed and integrated manually.
