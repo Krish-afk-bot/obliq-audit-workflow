@@ -1,0 +1,29 @@
+{
+  "name": "obliq-audit-system",
+  "version": "1.0.0",
+  "description": "Multi-Tenant Audit Document Review System for CA Firms",
+  "scripts": {
+    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"blue.bold,green.bold\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "start": "concurrently -n \"BACKEND,FRONTEND\" -c \"blue.bold,green.bold\" \"npm run start:backend\" \"npm run dev:frontend\"",
+    "start:backend": "cd backend && npm start",
+    "seed": "cd backend && npm run seed",
+    "test": "cd backend && npm test",
+    "build": "cd frontend && npm run build",
+    "install:all": "cd backend && npm install && cd ../frontend && npm install"
+  },
+  "keywords": [
+    "multi-tenant",
+    "audit",
+    "chartered-accountancy",
+    "document-review",
+    "workflow",
+    "append-only-audit"
+  ],
+  "author": "OBLIQ Engineering Evaluation",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
