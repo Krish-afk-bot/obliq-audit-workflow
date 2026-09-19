@@ -1,0 +1,88 @@
+%PDF-1.4
+1 0 obj
+<<
+  /Type /Catalog
+  /Pages 2 0 R
+>>
+endobj
+2 0 obj
+<<
+  /Type /Pages
+  /Kids [3 0 R]
+  /Count 1
+>>
+endobj
+3 0 obj
+<<
+  /Type /Page
+  /Parent 2 0 R
+  /Resources <<
+    /Font <<
+      /F1 <<
+        /Type /Font
+        /Subtype /Type1
+        /BaseFont /Helvetica
+      >>
+    >>
+  >>
+  /MediaBox [0 0 595 842]
+  /Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+  /Length 1698
+>>
+stream
+BT
+/F1 16 Tf
+50 780 Td
+(HDFC BANK - ACCOUNT STATEMENT (PAGE 1 OF 2)) Tj
+/F1 10 Tf
+0 -25 Td
+(Account Name: ABC Traders Private Limited | Account No: 50200045892109) Tj
+0 -16 Td
+(Branch: Fort, Mumbai | IFSC: HDFC0000060 | Period: 01-Oct-2024 to 31-Dec-2024) Tj
+0 -16 Td
+(--------------------------------------------------------------------------------------------------) Tj
+0 -16 Td
+(DATE          CHQ/REF NO    PARTICULARS                          WITHDRAWAL     DEPOSIT       BALANCE) Tj
+0 -16 Td
+(01-OCT-2024   INIT-BAL      Opening Balance                      -              -             12,45,200.00) Tj
+0 -16 Td
+(04-OCT-2024   UPI-42890123  UPI/MAHARASHTRA RETAIL/ICICI         -              1,47,500.00   13,92,700.00) Tj
+0 -16 Td
+(08-OCT-2024   RTGS-4001923  RTGS/TATA STEEL DIST/SBI             2,47,800.00    -             11,44,900.00) Tj
+0 -16 Td
+(15-OCT-2024   NEFT-8839124  NEFT/KULKARNI & DESHMUKH CA          45,000.00      -             10,99,900.00) Tj
+0 -16 Td
+(19-OCT-2024   IMPS-5510294  IMPS/RELIANCE IND/HDFC               1,71,100.00    -              9,28,800.00) Tj
+0 -16 Td
+(26-OCT-2024   UPI-77182901  UPI/GUJARAT POLYMERS/AXIS            -              1,00,300.00   10,29,100.00) Tj
+0 -16 Td
+(05-NOV-2024   NEFT-3091823  NEFT/INFOSYS IT INFRA/ICICI          1,12,100.00    -              9,17,000.00) Tj
+0 -16 Td
+(19-NOV-2024   RTGS-8910283  RTGS/BENGALURU CLOUD/KOTAK           -              3,65,800.00   12,82,800.00) Tj
+0 -16 Td
+(--------------------------------------------------------------------------------------------------) Tj
+0 -16 Td
+([NOTE: Page 2 of 2 attached. \(Audit observation: Page 3 quarterly interest & charge summary missing\)]) Tj
+0 -16 Td
+ET
+endstream
+endobj
+xref
+0 5
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000306 00000 n 
+trailer
+<<
+  /Size 5
+  /Root 1 0 R
+>>
+startxref
+2068
+%%EOF

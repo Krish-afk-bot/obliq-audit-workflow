@@ -1,0 +1,82 @@
+%PDF-1.4
+1 0 obj
+<<
+  /Type /Catalog
+  /Pages 2 0 R
+>>
+endobj
+2 0 obj
+<<
+  /Type /Pages
+  /Kids [3 0 R]
+  /Count 1
+>>
+endobj
+3 0 obj
+<<
+  /Type /Page
+  /Parent 2 0 R
+  /Resources <<
+    /Font <<
+      /F1 <<
+        /Type /Font
+        /Subtype /Type1
+        /BaseFont /Helvetica
+      >>
+    >>
+  >>
+  /MediaBox [0 0 595 842]
+  /Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+  /Length 1178
+>>
+stream
+BT
+/F1 16 Tf
+50 780 Td
+(FORM GSTR-3B [See Rule 61(5)] - Monthly Summary Return) Tj
+/F1 10 Tf
+0 -25 Td
+(GSTIN: 27AABCA1234F1Z5 | Legal Name: ABC Traders Private Limited | FY: 2024-2025 | Month: Dec 2024) Tj
+0 -16 Td
+(--------------------------------------------------------------------------------------------------) Tj
+0 -16 Td
+(3.1 Details of Outward Supplies and inward supplies liable to reverse charge:) Tj
+0 -16 Td
+(  \(a\) Outward taxable supplies \(other than zero-rated, nil rated and exempted\):) Tj
+0 -16 Td
+(      Total Taxable Value: INR 4,17,000.00 | IGST: INR 43,560.00 | CGST: INR 15,750.00 | SGST: INR 15,750.00) Tj
+0 -16 Td
+(4. Eligible ITC \(Input Tax Credit\):) Tj
+0 -16 Td
+(  \(A\) ITC Available \(whether in full or part\):) Tj
+0 -16 Td
+(      \(5\) All other ITC: IGST: INR 3,330.00 | CGST: INR 1,152.00 | SGST: INR 1,152.00) Tj
+0 -16 Td
+(5. Payment of Tax: Paid via Electronic Cash Ledger. Challan CIN: HDFC24122700192.) Tj
+0 -16 Td
+(--------------------------------------------------------------------------------------------------) Tj
+0 -16 Td
+(Verification: I hereby solemnly affirm that the information given above is true and correct.) Tj
+0 -16 Td
+ET
+endstream
+endobj
+xref
+0 5
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000306 00000 n 
+trailer
+<<
+  /Size 5
+  /Root 1 0 R
+>>
+startxref
+1548
+%%EOF
