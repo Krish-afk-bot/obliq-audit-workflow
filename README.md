@@ -1,25 +1,59 @@
-# OBLIQ Audit Review System (FE-2 Evaluation)
+# OBLIQ Audit Review System
 
-A production-minded, secure, multi-tenant **Audit Document Review & Traceability System** designed for Chartered Accountancy (CA) firms. Built strictly to satisfy and exceed all requirements outlined in the **OBLIQ-in FE-2 Evaluation Blueprint**.
+**A secure, multi-tenant Audit Document Review & Traceability System designed for Chartered Accountancy (CA) firms.**
 
----
+The prototype demonstrates document workflow management, role-based authorization, tenant isolation, document versioning, and append-only audit traceability.
 
-## 🌟 Key Highlights & Engineering Highlights
+## Engineering Approach
 
-- 🏢 **Strict Multi-Tenant Isolation**: Hard boundary enforcement where every read, query, and mutation is scoped strictly to `req.user.firmId` derived from verified JWT tokens. Client spoofing of `firmId` is completely blocked.
-- 🔄 **Deterministic Document State Machine**:
-  $$\text{PENDING} \xrightarrow{\text{Upload}} \text{UPLOADED} \xrightarrow{\text{Start Review}} \text{UNDER\_REVIEW} \begin{cases} \xrightarrow{\text{Approve}} \text{APPROVED (Terminal)} \\ \xrightarrow{\text{Request Correction}} \text{CORRECTION\_REQUIRED} \xrightarrow{\text{Re-upload}} \text{UPLOADED} \end{cases}$$
-- 🛡️ **Role-Based Authorization (RBAC)**:
+- **Modular monolith**: Clean separation of routes, controllers, and services.
+- **Backend-enforced authorization**: Strict role checks (`STAFF`, `REVIEWER`) at the API level.
+- **Firm-level tenant isolation**: Every query is securely scoped to the authenticated user's `firmId`.
+- **Explicit document state machine**: Deterministic state transitions from `PENDING` to `APPROVED`.
+- **Document version preservation**: Non-destructive updates where all uploaded revisions are preserved.
+- **Append-only audit events**: Tamper-proof history tracking for all critical workflow actions.
+- **Simple storage abstraction**: Abstracted local storage interface, ready for cloud integration.
+- **Automated backend integration tests**: Comprehensive test coverage across security boundaries and workflow rules.
+
+## Key Features
+
+- **Strict Multi-Tenant Isolation**: Hard boundary enforcement where every read, query, and mutation is scoped strictly to `req.user.firmId` derived from verified JWT tokens. Client spoofing of `firmId` is completely blocked.
+- **Role-Based Authorization (RBAC)**:
   - **STAFF**: Can view firm clients, upload initial documents, and re-upload corrected revisions. Cannot approve or request corrections.
   - **REVIEWER**: Can conduct audit reviews, request corrections (with mandatory reason), and issue certified approvals.
-- 📜 **Append-Only Audit History**: Dedicated, immutable audit events ledger (`AuditEvent`). Events are never updated or deleted. Full temporal traceability of actors, actions, timestamps, and metadata.
-- 📁 **Non-Destructive Version Preservation**: Multi-version retention where revisions ($v_1, v_2$) are independently archived and queryable behind an abstract storage interface.
-- 🇮🇳 **Grounded in Synthetic Indian Financial Datasets**: Integrated sample datasets for Indian CA workflows (HDFC Bank Statements with missing schedules vs reconciled versions, GSTR-1, GSTR-2B, GSTR-3B, Tax Invoices).
-- ⚡ **Zero-Config Zero-Setup**: Includes automatic fallback to embedded in-memory MongoDB (`mongodb-memory-server`) if a local MongoDB instance is not active. Runs immediately out of the box!
+- **Append-Only Audit History**: Dedicated, immutable audit events ledger (`AuditEvent`). Events are never updated or deleted. Full temporal traceability of actors, actions, timestamps, and metadata.
+- **Non-Destructive Version Preservation**: Multi-version retention where revisions (v1, v2) are independently archived and queryable behind an abstract storage interface.
+- **Grounded in Synthetic Indian Financial Datasets**: Integrated sample datasets for Indian CA workflows.
+- **Zero-Config Zero-Setup**: Includes automatic fallback to embedded in-memory MongoDB (`mongodb-memory-server`) if a local MongoDB instance is not active. Runs immediately out of the box!
 
----
+## Architecture
 
-## 🚀 Quick Start (One-Command Setup)
+```text
+backend/
+├── src/
+│   ├── config/          # Environment & MongoDB auto in-memory fallback
+│   ├── middleware/      # JWT Authenticate, Role Authorize, Tenant Isolation
+│   ├── models/          # Firm, User, Client, Document, DocumentVersion, AuditEvent
+│   ├── modules/         # Auth, Clients, Documents, Reviews, Audit, Dashboard
+│   ├── services/        # Workflow state machine, Append-only Audit, Storage
+│   ├── seed/            # Pre-seeded Indian CA firms, clients & documents
+│   ├── app.js           # Express app definition
+│   └── server.js        # Server entrypoint
+└── tests/               # Jest & Supertest automated test suites
+
+frontend/
+├── src/
+│   ├── api/             # HTTP Client with JWT interceptors
+│   ├── context/         # AuthContext & 1-Click Persona Switcher
+│   ├── components/      # Reusable UI components
+│   └── pages/           # Application views
+├── tailwind.config.js
+└── vite.config.js       # Proxying /api to backend
+
+sample-data/             # Synthetic Indian CA financial documents
+```
+
+## Quick Start
 
 ### 1. Prerequisites
 - **Node.js** (v18 or higher recommended)
@@ -30,7 +64,6 @@ From the project root:
 ```bash
 npm run install:all
 ```
-*(Or `cd backend && npm install && cd ../frontend && npm install`)*
 
 ### 3. Run the Full Stack
 Start both the Backend API server (Port 5001) and Frontend UI (Port 5173) simultaneously:
@@ -38,131 +71,108 @@ Start both the Backend API server (Port 5001) and Frontend UI (Port 5173) simult
 npm run dev
 ```
 
-Open your browser at:
-👉 **[http://localhost:5173](http://localhost:5173)**
+Open your browser at: [http://localhost:5173](http://localhost:5173)
 
----
+## Evaluation Credentials
 
-## 👥 Pre-Seeded Evaluation Personas
-
-The system includes pre-seeded CA firms and users for instantaneous evaluation. You can sign in using credentials or use the **1-Click Persona Switcher** inside the app.
+> **Evaluation-only seeded credentials. These accounts and passwords are synthetic and intended only for local evaluation.**
 
 | Firm Name | Code | User Name | Role | Email | Password |
-|:---|:---:|:---|:---:|:---|:---|
-| **ABC & Co. Chartered Accountants** (Firm 1) | `ABC-CA` | Rohit Sharma | **STAFF** | `rohit@abcca.com` | `password123` |
-| **ABC & Co. Chartered Accountants** (Firm 1) | `ABC-CA` | Aman Verma | **REVIEWER** | `aman@abcca.com` | `password123` |
-| **Apex Tax & Audit Advisors** (Firm 2) | `APEX-TAX` | Priya Mehta | **STAFF** | `priya@apex.com` | `password123` |
-| **Apex Tax & Audit Advisors** (Firm 2) | `APEX-TAX` | Vikram Malhotra | **REVIEWER** | `vikram@apex.com` | `password123` |
+|---|---|---|---|---|---|
+| ABC & Co. Chartered Accountants | `ABC-CA` | Rohit Sharma | STAFF | `rohit@abcca.com` | `password123` |
+| ABC & Co. Chartered Accountants | `ABC-CA` | Aman Verma | REVIEWER | `aman@abcca.com` | `password123` |
+| Apex Tax & Audit Advisors | `APEX-TAX` | Priya Mehta | STAFF | `priya@apex.com` | `password123` |
+| Apex Tax & Audit Advisors | `APEX-TAX` | Vikram Malhotra | REVIEWER | `vikram@apex.com` | `password123` |
 
----
+## Evaluation Walkthrough
 
-## 🧪 Evaluation Walkthrough (12-Step Scenario)
+1. **Firm A Staff Login**: Sign in as `rohit@abcca.com` (or click "Rohit (Staff)" preset). Navigate to **Clients & Audits**. Open client **ABC Traders Pvt. Ltd.**
+2. **Initial Mandatory Document Schedule**: Observe the 5 required documents auto-initialized in `PENDING` state (Bank Statement, Sales Register, Purchase Register, GST Return, Expense Summary).
+3. **Staff Uploads Document v1**: Click **Upload File** on *Bank Statement*. Click the 1-click synthetic dataset button: **"Bank Statement (v1 with missing schedule)"**. Notice the document status immediately transitions to `UPLOADED (v1)`.
+4. **Switch to Reviewer**: Use the top navigation bar dropdown to switch to **Aman Verma (Reviewer)** with 1 click.
+5. **Reviewer Starts Review**: In *Bank Statement*, click **Open Review Panel**. Click **Start Review**. Status transitions from `UPLOADED` to `UNDER_REVIEW`.
+6. **Reviewer Requests Correction**: Click **Request Correction**. Select or type discrepancy note: *"Page 3 quarterly interest & bank charge summary is missing. Please provide complete statement."* Submit. Status transitions from `UNDER_REVIEW` to `CORRECTION_REQUIRED`.
+7. **Staff Re-upload (v2)**: Switch back to **Rohit (Staff)**. Click **Re-upload Corrected (v2)** and select **"Bank Statement (v2 Corrected with Page 3 schedule)"**. Status transitions back to `UPLOADED (v2)`. Note that v1 is still intact in history!
+8. **Reviewer Approves Corrected Document**: Switch back to **Aman (Reviewer)**. Click **Start Review** -> Click **Approve Document**. Add sign-off note. Status locks permanently to `APPROVED`.
+9. **Inspect Append-Only Audit Timeline**: Open the **Audit Timeline** tab. Observe the immutable record of events.
+10. **Demonstrate Multi-Tenant Isolation**: Switch to **Priya Mehta (Firm 2 Staff)**. Firm 1's client (ABC Traders) is completely invisible. Open the **Tenant Isolation Demo** tab. Click **Run Security Boundary Test**.
 
-This workflow directly demonstrates the evaluation sequence specified in **Section 15 of `procedure.md`**:
+## What This Demonstrates
 
-1. **Firm A Staff Login**:
-   - Sign in as `rohit@abcca.com` (or click "Rohit (Staff)" preset).
-   - Navigate to **Clients & Audits**. Open client **ABC Traders Pvt. Ltd.**
-2. **Initial Mandatory Document Schedule**:
-   - Observe the 5 required documents auto-initialized in `PENDING` state:
-     - Bank Statement
-     - Sales Register
-     - Purchase Register
-     - GST Return
-     - Expense Summary
-3. **Staff Uploads Document v1**:
-   - Click **Upload File** on *Bank Statement*.
-   - Click the 1-click synthetic dataset button: **"Bank Statement (v1 with missing schedule)"**.
-   - Notice the document status immediately transitions to `UPLOADED (v1)`.
-4. **Switch to Reviewer**:
-   - Use the top navigation bar dropdown to switch to **Aman Verma (Reviewer)** with 1 click.
-   - Notice the review controls are now enabled.
-5. **Reviewer Starts Review**:
-   - In *Bank Statement*, click **Open Review Panel**.
-   - Click **Start Review**. Status transitions from `UPLOADED` to `UNDER_REVIEW`.
-6. **Reviewer Requests Correction (Mandatory Reason)**:
-   - Click **Request Correction**.
-   - Select or type discrepancy note: *"Page 3 quarterly interest & bank charge summary is missing. Please provide complete statement."*
-   - Submit. Status transitions from `UNDER_REVIEW` to `CORRECTION_REQUIRED`.
-7. **Switch back to Staff & Re-upload (v2)**:
-   - Switch back to **Rohit (Staff)**.
-   - Notice the prominent discrepancy alert banner showing Aman's requested note.
-   - Click **Re-upload Corrected (v2)** and select **"Bank Statement (v2 Corrected with Page 3 schedule)"**.
-   - Status transitions back to `UPLOADED (v2)`. Note that $v_1$ is still intact in history!
-8. **Reviewer Approves Corrected Document**:
-   - Switch back to **Aman (Reviewer)**.
-   - Click **Start Review** -> Click **Approve Document**. Add sign-off note: *"Reconciled against GSTR-2B. Certified."*
-   - Status locks permanently to `APPROVED`. Edits and further re-uploads are forbidden (terminal state).
-9. **Inspect Append-Only Audit Timeline**:
-   - Open the **Audit Timeline** tab.
-   - Observe the immutable record of:
-     - `CLIENT_CREATED`
-     - `DOCUMENT_ADDED`
-     - `DOCUMENT_UPLOADED` (v1)
-     - `REVIEW_STARTED`
-     - `CORRECTION_REQUESTED` (with discrepancy reason)
-     - `DOCUMENT_REUPLOADED` (v2)
-     - `REVIEW_STARTED`
-     - `DOCUMENT_APPROVED` (with certification note)
-10. **Demonstrate Multi-Tenant Isolation**:
-    - Switch to **Priya Mehta (Firm 2 Staff)**.
-    - Firm 1's client (ABC Traders) is completely invisible.
-    - Open the **Tenant Isolation Demo** tab.
-    - Click **Run Security Boundary Test**: The live probe attempts a cross-tenant direct read and a `firmId` body spoofing attack. The backend rejects them with `HTTP 404` and `HTTP 403`, confirming zero data leakage.
-
----
-
-## 🏗️ Architecture & Engineering Design
-
+```text
+Business workflow modeling
+        +
+Role-based authorization
+        +
+Multi-tenant security
+        +
+Document versioning
+        +
+Audit traceability
+        +
+Backend integration testing
 ```
-krishbkl/
-├── backend/
-│   ├── src/
-│   │   ├── config/          # Environment & MongoDB auto in-memory fallback
-│   │   ├── middleware/      # JWT Authenticate, Role Authorize, Tenant Isolation, Multer
-│   │   ├── models/          # Firm, User, Client, Document, DocumentVersion, AuditEvent
-│   │   ├── modules/         # Auth, Clients, Documents, Reviews, Audit, Dashboard
-│   │   ├── services/        # Workflow state machine, Append-only Audit, Storage
-│   │   ├── seed/            # Pre-seeded Indian CA firms, clients & documents
-│   │   ├── app.js           # Express app definition
-│   │   └── server.js        # Server entrypoint
-│   └── tests/               # Jest & Supertest automated test suites
-├── frontend/
-│   ├── src/
-│   │   ├── api/             # HTTP Client with JWT interceptors
-│   │   ├── context/         # AuthContext & 1-Click Persona Switcher
-│   │   ├── components/      # Modals (Upload, Correction, Approve), Badges, Timeline
-│   │   └── pages/           # Dashboard, Clients, Workspace, Document Review, Tenant Demo
-│   ├── tailwind.config.js
-│   └── vite.config.js       # Proxying /api to port 5001
-└── sample-data/             # Synthetic Indian CA financial documents (PDFs & CSVs)
+
+This prototype focuses on the core workflow requested by the evaluation rather than unrelated platform features.
+
+## Document Workflow
+
+```text
+PENDING
+   ↓ Upload
+UPLOADED
+   ↓ Start Review
+UNDER_REVIEW
+   ├── Approve → APPROVED (Terminal)
+   │
+   └── Request Correction
+          ↓
+   CORRECTION_REQUIRED
+          ↓ Re-upload
+       UPLOADED
 ```
 
 ### State Machine Transition Rules
 
 | Initial State | Allowed Action | Next State | Authorized Roles |
-|:---|:---|:---|:---|
-| `PENDING` | Upload File | `UPLOADED` | `STAFF`, `REVIEWER` |
-| `UPLOADED` | Start Review | `UNDER_REVIEW` | `REVIEWER` only |
-| `UNDER_REVIEW` | Request Correction | `CORRECTION_REQUIRED` | `REVIEWER` only (requires non-empty comment) |
-| `UNDER_REVIEW` | Approve Document | `APPROVED` | `REVIEWER` only |
-| `CORRECTION_REQUIRED` | Re-upload File | `UPLOADED` | `STAFF`, `REVIEWER` |
+|---|---|---|---|
+| `PENDING` | Upload File | `UPLOADED` | STAFF, REVIEWER |
+| `UPLOADED` | Start Review | `UNDER_REVIEW` | REVIEWER only |
+| `UNDER_REVIEW` | Request Correction | `CORRECTION_REQUIRED` | REVIEWER only (requires non-empty comment) |
+| `UNDER_REVIEW` | Approve Document | `APPROVED` | REVIEWER only |
+| `CORRECTION_REQUIRED` | Re-upload File | `UPLOADED` | STAFF, REVIEWER |
 | `APPROVED` | *(None)* | **Terminal Locked** | No transitions allowed |
 
----
+## Multi-Tenant Security
 
-## 🔬 Automated Backend Test Suites
+### Authentication
+The user is identified securely through a verified JWT token.
 
-The backend includes comprehensive integration test suites covering:
-1. **Authentication & Identity**: Token issuance, password hashing, invalid credentials, `/me` endpoint.
-2. **Tenant Isolation**: Cross-firm ID lookups return 404, spoofed `firmId` in body returns 403.
-3. **Workflow State Transitions & Permissions**:
-   - `PENDING -> UNDER_REVIEW` directly is blocked.
-   - Staff attempting to approve returns 403.
-   - Requesting correction without a comment is blocked with 400.
-   - Uploading a revised version preserves version history ($v_1$ and $v_2$ both exist).
-   - Once approved, transitions or re-uploads are rejected.
-4. **Append-Only Audit Immutability**: All lifecycle actions generate tamper-proof audit records; no modification or deletion routes exist.
+### Authorization
+The assigned Role (`STAFF`, `REVIEWER`) determines which actions the user can perform.
+
+### Tenant Isolation
+Firm identity comes entirely from the server-verified JWT (`req.user.firmId`) rather than trusting a client-supplied `firmId`. Every database resource query is strictly scoped by the authenticated user's firm. The included security-boundary test verifies that cross-tenant resource access and `firmId` spoofing attempts are rejected by the backend.
+
+## Audit Trail & Versioning
+
+### Audit Trail
+Audit events have no normal update/delete routes and are treated as append-only application records. The timeline cleanly shows:
+- **Who** performed the action
+- **What** action occurred
+- **When** the event happened
+- **Which document** was affected
+- **Why** (comments or discrepancy reasons)
+
+### Document Versioning
+```text
+Bank Statement
+├── v1 → Correction Required
+└── v2 → Approved
+```
+A corrected submission does not overwrite the previous submission. Each uploaded revision remains independently traceable.
+
+## Testing
 
 To execute the test suites:
 ```bash
@@ -170,20 +180,19 @@ npm test
 ```
 *Result: **23/23 tests passing** across 4 test suites.*
 
----
+## Project Structure
+*(Covered in Architecture)*
 
-## 🛡️ Tenant Isolation & Zero-Trust Guarantees
+## Future Improvements
 
-1. **Token-Derived Authority**: `req.user.firmId` is extracted solely from the cryptographically verified JWT payload and verified in the database. Never trusted from client requests.
-2. **Anti-Spoofing Middleware**: Incoming POST/PUT requests are inspected. Any payload supplying a mismatched `firmId` is immediately rejected with `403 Forbidden`.
-3. **Mandatory Query Scoping**: Every single database query strictly filters by `{ _id: resourceId, firmId: req.user.firmId }`. A query for a valid ID of another firm evaluates to `null` and safely returns `404 Not Found`.
-4. **Tenant-Partitioned Storage**: File uploads are segregated into isolated tenant directories (`uploads/tenants/<firmId>/...`), preventing filesystem collision or cross-tenant reads.
+- **Cloud Object Storage**: Abstracted storage adapter for AWS S3 or Google Cloud Storage.
+- **Virus / Malware Scanning**: Integration with ClamAV or AWS GuardDuty hooks.
+- **Digital Signatures (DSC / eSign)**: Integration with Aadhaar eSign or Class 3 DSC tokens for certification.
 
----
+## AI Tools Used
 
-## 📈 Production Scaling & Extensibility Roadmap
+- **ChatGPT**: Architecture discussion, debugging assistance, documentation refinement
+- **Cursor**: Implementation support
 
-- **Cloud Object Storage**: The storage layer is abstracted behind `storageService.js`. Switching from local disk to AWS S3 or Google Cloud Storage requires only updating the storage adapter without modifying controllers.
-- **Virus / Malware Scanning**: File upload pipeline can integrate ClamAV or AWS GuardDuty hooks inside the multer storage middleware.
-- **Granular Client Assignment**: Permissions can be extended to assign specific staff members or partner reviewers to specific clients.
-- **Digital Signatures (DSC / eSign)**: For Indian CA audit certification, integrating Aadhaar eSign or Class 3 DSC tokens upon the `APPROVED` state.
+### How AI Was Used
+AI tools were used as development assistants for architecture exploration, debugging, implementation support, and documentation. All generated suggestions were reviewed and integrated manually.
